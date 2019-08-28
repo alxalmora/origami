@@ -575,7 +575,11 @@ module Origami
             end
 
             def AES.decrypt(key, data)
-                AES.new(key, nil).decrypt(data)
+                use_padding =  data.size % BLOCKSIZE == 0
+                while( data.size % BLOCKSIZE != 0) do
+                    data += '0'
+                end
+                AES.new(key, nil, use_padding).decrypt(data)
             end
 
             def initialize(key, iv, use_padding = true)
